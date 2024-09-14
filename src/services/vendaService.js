@@ -1,6 +1,6 @@
 // services/vendaService.js
 const Venda = require('../models/Venda');
-const Produto = require('../models/produto'); // Certifique-se de ter o modelo Produto configurado
+const Produto = require('../models/Produto'); // Certifique-se de ter o modelo Produto configurado
 
 const realizarVenda = async (produtoId, clienteId, quantidade, custoMaoObra, imposto) => {
     // Verificar se o produto tem estoque suficiente

@@ -1,45 +1,44 @@
-const produtoService = require('../services/produtoService');
+const Produto = require('../models/Produto'); // Certifique-se de que o caminho está correto
+
 
 // Adicionar produto
-const adicionarProduto = async ({ nome, quantidade, preco, notas, quantidade_de_stock_baixo, imagem, categoriaId }) => {
-    if (!nome || quantidade === undefined || preco === undefined || !categoriaId) {
+const adicionarProduto = async ({ nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id }) => {
+    if (!nome || quantidade === undefined || preco === undefined || !categoria_id) {
         throw new Error('Nome, quantidade, preço e categoria são necessários');
     }
-    return await Produto.create({ nome, quantidade, preco, notas, quantidade_de_stock_baixo, imagem, categoriaId });
+    return await Produto.create({ nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id });
 };
 
 // Atualizar produto
-const atualizarProduto = async (id, { nome, quantidade, preco, notas, quantidade_de_stock_baixo, imagem, categoriaId }) => {
+const atualizarProduto = async (id, { nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id }) => {
     const produto = await Produto.findByPk(id);
     if (!produto) {
         throw new Error('Produto não encontrado');
     }
-    return await produto.update({ nome, quantidade, preco, notas, quantidade_de_stock_baixo, imagem, categoriaId });
+    return await produto.update({ nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id });
 };
 
 // Deletar produto
-const deletarProduto = (req, res) => {
-    const { id } = req.params;
-
-    produtoService.deletarProduto(id)
-        .then(() => res.status(200).send('Produto deletado com sucesso'))
-        .catch(err => res.status(500).send(err.message));
+const deletarProduto = async (id) => {
+    const produto = await Produto.findByPk(id);
+    if (!produto) {
+        throw new Error('Produto não encontrado');
+    }
+    await produto.destroy();
 };
 
 // Obter um produto
-const obterProduto = (req, res) => {
-    const { id } = req.params;
-
-    produtoService.obterProduto(id)
-        .then(produto => res.status(200).json(produto))
-        .catch(err => res.status(500).send(err.message));
+const obterProduto = async (id) => {
+    const produto = await Produto.findByPk(id);
+    if (!produto) {
+        throw new Error('Produto não encontrado');
+    }
+    return produto;
 };
 
 // Listar produtos
-const listarProdutos = (req, res) => {
-    produtoService.listarProdutos()
-        .then(produtos => res.status(200).json(produtos))
-        .catch(err => res.status(500).send(err.message));
+const listarProdutos = async () => {
+    return await Produto.findAll();
 };
 
 module.exports = { adicionarProduto, atualizarProduto, deletarProduto, obterProduto, listarProdutos };

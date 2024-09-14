@@ -4,7 +4,14 @@ const Categoria = require('../models/Categoria');
 const criarCategoria = async (nome) => {
     return await Categoria.create({ nome });
 };
-
+const listarCategorias = async () => {
+    try {
+        const categorias = await Categoria.findAll();
+        return categorias;
+    } catch (error) {
+        throw new Error('Erro ao listar categorias: ' + error.message);
+    }
+};
 const atualizarCategoria = async (id, nome) => {
     const categoria = await Categoria.findByPk(id);
     if (!categoria) throw new Error('Categoria não encontrada');
@@ -19,4 +26,4 @@ const deletarCategoria = async (id) => {
     await categoria.destroy();
 };
 
-module.exports = { criarCategoria, atualizarCategoria, deletarCategoria };
+module.exports = { criarCategoria, listarCategorias, atualizarCategoria, deletarCategoria };

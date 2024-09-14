@@ -7,8 +7,10 @@ const router = express.Router();
 // Criar uma nova categoria
 router.post('/',  categoriaController.criarCategoria);
 
+router.get('/',  categoriaController.listarCategorias);
 // Atualizar uma categoria existente
 router.put('/:id',  categoriaController.atualizarCategoria);
+
 
 // Deletar uma categoria
 router.delete('/:id',  categoriaController.deletarCategoria);

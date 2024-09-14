@@ -12,6 +12,15 @@ const criarCategoria = async (req, res) => {
     }
 };
 
+const listarCategorias = async (req, res) => {
+    try {
+        const categorias = await categoriaService.listarCategorias();
+        res.status(200).json(categorias);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const atualizarCategoria = async (req, res) => {
     const { id } = req.params;
     const { nome } = req.body;
@@ -43,4 +52,4 @@ const deletarCategoria = async (req, res) => {
     }
 };
 
-module.exports = { criarCategoria, atualizarCategoria, deletarCategoria };
+module.exports = { criarCategoria,listarCategorias, atualizarCategoria, deletarCategoria };

@@ -20,7 +20,11 @@ const Produto = sequelize.define('Produto', {
         type: DataTypes.TEXT,
         allowNull: true, // Notas podem ser opcionais
     },
-    quantidade_de_stock_baixo: {
+    descricao: {
+        type: DataTypes.TEXT,
+        allowNull: true, // descricao pode ser opcional
+    },
+    quantidadeMinima: {
         type: DataTypes.INTEGER,
         allowNull: false,
         defaultValue: 5, // Valor padrão para quando a quantidade de estoque está baixa
@@ -29,7 +33,7 @@ const Produto = sequelize.define('Produto', {
         type: DataTypes.STRING, // Pode armazenar o caminho ou URL da imagem
         allowNull: true,
     },
-    categoriaId: {
+    categoria_id: {
         type: DataTypes.INTEGER,
         references: {
             model: Categoria,
