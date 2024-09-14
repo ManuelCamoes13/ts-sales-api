@@ -1,28 +1,45 @@
-const db = require('../config/db');
+const { DataTypes } = require('sequelize');
+const sequelize = require('../config/db');
+const Categoria = require('./Categoria'); // Importar o modelo de Categoria, que será a chave estrangeira
 
-// Adicionar produto
-const adicionarProduto = (nome, quantidade, preco) => {
-    const query = 'INSERT INTO produtos (nome, quantidade, preco) VALUES (?, ?, ?)';
-    return new Promise((resolve, reject) => {
-        db.query(query, [nome, quantidade, preco], (err) => {
-            if (err) {
-                return reject(new Error('Erro ao adicionar produto'));
-            }
-            resolve();
-        });
-    });
-};
+// Definição do modelo Produto
+const Produto = sequelize.define('Produto', {
+    nome: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    quantidade: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+    },
+    preco: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
+    notas: {
+        type: DataTypes.TEXT,
+        allowNull: true, // Notas podem ser opcionais
+    },
+    quantidade_de_stock_baixo: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        defaultValue: 5, // Valor padrão para quando a quantidade de estoque está baixa
+    },
+    imagem: {
+        type: DataTypes.STRING, // Pode armazenar o caminho ou URL da imagem
+        allowNull: true,
+    },
+    categoriaId: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Categoria,
+            key: 'id',
+        },
+        allowNull: false,
+    }
+}, {
+    tableName: 'produtos',
+    timestamps: false,
+});
 
-// Listar produtos
-const listarProdutos = () => {
-    return new Promise((resolve, reject) => {
-        db.query('SELECT * FROM produtos', (err, resultados) => {
-            if (err) {
-                return reject(new Error('Erro ao obter produtos'));
-            }
-            resolve(resultados);
-        });
-    });
-};
-
-module.exports = { adicionarProduto, listarProdutos };
+module.exports = Produto;
