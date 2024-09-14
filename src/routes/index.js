@@ -20,7 +20,7 @@ router.use('/users', userRoutes);
 router.use('/produtos', verificarToken, produtoRoutes); // Protege todas as rotas de produtos
 router.use('/venda', verificarToken, vendaRoutes); 
 router.use('/categorias',verificarToken, categoriaRoutes);
-router.use('/clientes',verificarToken, clienteRoutes);
+router.use('/clientes', clienteRoutes);
 router.use('/facturas', facturaRoutes);
 // Caso queira proteger rotas específicas dentro de um grupo de rotas, faça assim:
 

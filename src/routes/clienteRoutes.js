@@ -7,10 +7,13 @@ const router = express.Router();
 // Criar um novo cliente
 router.post('/', clienteController.criarCliente);
 
+router.get('/', clienteController.listarClientes);
+
 // Atualizar um cliente existente
 router.put('/:id', clienteController.atualizarCliente);
 
 // Deletar um cliente
 router.delete('/:id', clienteController.deletarCliente);
+
 
 module.exports = router;

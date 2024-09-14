@@ -12,6 +12,15 @@ const criarCliente = async (req, res) => {
     }
 };
 
+const listarClientes = async (req, res) => {
+    try {
+        const clientes = await clienteService.listarClientes();
+        res.status(200).json(clientes);
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
 const atualizarCliente = async (req, res) => {
     const { id } = req.params;
     const { nome, nuit, email, contacto, endereco } = req.body;
@@ -43,4 +52,4 @@ const deletarCliente = async (req, res) => {
     }
 };
 
-module.exports = { criarCliente, atualizarCliente, deletarCliente };
+module.exports = { criarCliente,listarClientes, atualizarCliente, deletarCliente };

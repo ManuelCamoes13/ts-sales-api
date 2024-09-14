@@ -5,6 +5,15 @@ const criarCliente = async (nome, nuit, email, contacto, endereco) => {
     return await Cliente.create({ nome, nuit, email, contacto, endereco });
 };
 
+const listarClientes = async () => {
+    try {
+        const clientes = await Cliente.findAll();
+        return clientes;
+    } catch (error) {
+        throw new Error('Erro ao listar clientes: ' + error.message);
+    }
+};
+
 const atualizarCliente = async (id, nome, nuit, email, contacto, endereco) => {
     const cliente = await Cliente.findByPk(id);
     if (!cliente) throw new Error('Cliente não encontrado');
@@ -23,4 +32,4 @@ const deletarCliente = async (id) => {
     await cliente.destroy();
 };
 
-module.exports = { criarCliente, atualizarCliente, deletarCliente };
+module.exports = { criarCliente,listarClientes, atualizarCliente, deletarCliente };
