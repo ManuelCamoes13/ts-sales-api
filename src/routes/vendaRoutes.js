@@ -6,5 +6,8 @@ const router = express.Router();
 router.post('/', vendaController.realizarVenda);
 
 // Outras rotas específicas para vendas podem ser adicionadas aqui no futuro
+router.get('/', vendaController.getAllVendas);
+
+
 
 module.exports = router;

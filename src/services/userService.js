@@ -42,4 +42,6 @@ const loginUtilizador = async ({ email, password }) => {
     return { auth: true, token, user: userData };
 };
 
+
+
 module.exports = { registrarUtilizador, loginUtilizador };

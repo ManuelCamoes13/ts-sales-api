@@ -1,46 +1,35 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('cotacoes', {
+    await queryInterface.createTable('venda_mao_de_obras', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
       },
-      cliente_id: {
+      venda_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
-          model: 'clientes',
+          model: 'vendas', // Nome da tabela de vendas
           key: 'id',
         },
-        allowNull: false,
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
-      produto_id: {
+      mao_de_obra_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
-          model: 'produtos',
+          model: 'mao_de_obra', // Nome da tabela de mãos-de-obra
           key: 'id',
         },
-        allowNull: false,
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      },
-      quantidade: {
-        type: Sequelize.INTEGER,
-        allowNull: false,
+        onDelete: 'CASCADE',
       },
       preco: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      validade: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
-      estado: {
-        type: Sequelize.STRING(50),
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       createdAt: {
@@ -57,6 +46,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('cotacoes');
+    await queryInterface.dropTable('venda_mao_de_obras');
   }
 };
