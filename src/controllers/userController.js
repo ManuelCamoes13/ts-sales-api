@@ -17,5 +17,13 @@ const loginUtilizador = (req, res) => {
         .then(({ auth, token, user }) => res.status(200).send({ auth, token, user })) // Retorna os dados do usuário sem a senha
         .catch(err => res.status(400).send(err.message));
 };
+// Listar utilizadores
+const listarUsers = (req, res) => {
+    userService.listarUsers()
+        .then(users => res.status(200).json(users))
+        .catch(err => res.status(500).send(err.message));
+};
 
-module.exports = { registrarUtilizador, loginUtilizador };
+
+
+module.exports = { registrarUtilizador, loginUtilizador , listarUsers};

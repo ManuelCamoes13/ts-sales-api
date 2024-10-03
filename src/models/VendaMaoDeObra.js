@@ -21,6 +21,10 @@ VendaMaoDeObra.init({
             key: 'id',
         }
     },
+    preco: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+    },
 }, {
     sequelize,
     modelName: 'VendaMaoDeObra',

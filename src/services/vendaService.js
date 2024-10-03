@@ -40,6 +40,7 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
             await VendaMaoDeObra.create({
                 venda_id: novaVenda.id,
                 mao_de_obra_id: maoDeObra.mao_de_obra_id,
+                preco: maoDeObra.preco,
             }, { transaction });
         }
 

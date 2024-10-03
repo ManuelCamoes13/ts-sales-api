@@ -42,6 +42,9 @@ const loginUtilizador = async ({ email, password }) => {
     return { auth: true, token, user: userData };
 };
 
+const listarUsers = async () => {
+    return await User.findAll();
+};
 
 
-module.exports = { registrarUtilizador, loginUtilizador };
+module.exports = { registrarUtilizador, loginUtilizador, listarUsers };

@@ -3,12 +3,12 @@ const produtoService = require('../services/produtoService');
 // Adicionar produto
 const adicionarProduto = (req, res) => {
     console.log(req.body)
-    const { nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id } = req.body;
+    const { nome, descricao, quantidade, preco, notas, quantidadeMinima,tipo, unidade, imagem, categoria_id } = req.body;
     if (!nome || quantidade === undefined || preco === undefined || !categoria_id) {
         return res.status(400).send('Nome, quantidade, preço e categoria são necessários');
     }
 
-    produtoService.adicionarProduto({ nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id })
+    produtoService.adicionarProduto({ nome, descricao, quantidade, preco, notas, quantidadeMinima,tipo, unidade, imagem, categoria_id })
         .then(() => res.status(201).send('Produto adicionado com sucesso'))
         .catch(err => {
             console.error("Erro ao adicionar produto:", err);  // Imprime o erro completo no servidor
@@ -19,9 +19,9 @@ const adicionarProduto = (req, res) => {
 // Atualizar produto
 const atualizarProduto = (req, res) => {
     const { id } = req.params;
-    const { nome,descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id } = req.body;
+    const { nome,descricao, quantidade, preco, notas, quantidadeMinima,tipo, unidade, imagem, categoria_id } = req.body;
 
-    produtoService.atualizarProduto(id, { nome, descricao, quantidade, preco, notas, quantidadeMinima, imagem, categoria_id })
+    produtoService.atualizarProduto(id, { nome, descricao, quantidade, preco, notas, quantidadeMinima,tipo, unidade, imagem, categoria_id })
         .then(() => res.status(200).send('Produto atualizado com sucesso'))
         .catch(err => res.status(500).send(err.message));
 };

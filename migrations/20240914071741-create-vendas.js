@@ -1,3 +1,6 @@
+'use strict';
+
+const { DataTypes } = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
     await queryInterface.createTable('vendas', {
@@ -28,11 +31,19 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-  
+      codigoFactura: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true, // Ensure invoice numbers are unique
+      },
    
       imposto: {
         type: Sequelize.DECIMAL(10, 2),
         allowNull: true,
+      },
+      pago: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false, // valor padrão como false
       },
       
       createdAt: {
