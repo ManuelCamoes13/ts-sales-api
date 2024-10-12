@@ -14,9 +14,23 @@ const Factura = sequelize.define('Factura', {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
     },
+    codigoFactura: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+
+    codigoFactura: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true, // Ensure invoice numbers are unique
+      },
     data: {
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    dataPagamento: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
     },
     createdAt: {
         type: DataTypes.DATE,
