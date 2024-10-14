@@ -52,8 +52,9 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
             await VendaProduto.create({
                 venda_id: novaVenda.id,
                 produto_id: item.produto_id,
+                nome: item.nome,
                 quantidade: item.quantidade,
-                preco_unitario: item.preco_unitario,
+                preco_unitario: item.preco,
             }, { transaction });
 
             produto.quantidade -= item.quantidade;
@@ -65,6 +66,7 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
             await VendaMaoDeObra.create({
                 venda_id: novaVenda.id,
                 mao_de_obra_id: maoDeObra.mao_de_obra_id,
+                nome: maoDeObra.nome,
                 preco: maoDeObra.preco,
             }, { transaction });
         }
@@ -83,7 +85,7 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
 
         // Criar a fatura vinculada à venda
         await Factura.create({
-            vendaId: novaVenda.id,
+            venda_id: novaVenda.id,
             codigoFactura,
             data: new Date(),
             estado,

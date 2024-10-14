@@ -1,36 +1,29 @@
-'use strict';
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('venda_mao_de_obras', {
+    await queryInterface.createTable('recibos', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-      },
-      venda_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'vendas', // Nome da tabela de vendas
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      mao_de_obra_id: {
-        type: Sequelize.INTEGER,
-        allowNull: true,
-        references: {
-          model: 'mao_de_obra', // Nome da tabela de mãos-de-obra
-          key: 'id',
-        },
-        onUpdate: 'CASCADE',
-        onDelete: 'CASCADE',
-      },
-      preco: {
-        type: Sequelize.FLOAT,
         allowNull: false,
+      },
+      factura_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'facturas',
+          key: 'id',
+        },
+        allowNull: false,
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      },
+      tipo_pagamento: {
+        type: Sequelize.ENUM('cheque', 'numerario'), // Define os tipos de pagamento possíveis
+        allowNull: false,
+      },
+      numero_cheque: {
+        type: Sequelize.STRING,
+        allowNull: true, // Pode ser nulo se o tipo de pagamento não for cheque
       },
       createdAt: {
         type: Sequelize.DATE,
@@ -46,6 +39,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('venda_mao_de_obras');
+    await queryInterface.dropTable('recibos');
   }
 };

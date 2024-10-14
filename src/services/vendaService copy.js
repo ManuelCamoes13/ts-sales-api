@@ -30,7 +30,9 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
                 venda_id: novaVenda.id,
                 produto_id: item.produto_id,
                 quantidade: item.quantidade,
-                preco_unitario:item.preco_unitario
+                preco_unitario:item.preco,
+                nome:item.nome
+
             }, { transaction });
 
             // Atualizar o estoque do produto
@@ -44,6 +46,7 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
                 venda_id: novaVenda.id,
                 mao_de_obra_id: maoDeObra.mao_de_obra_id,
                 preco: maoDeObra.preco,
+                nome:maoDeObra.nome,
             }, { transaction });
         }
 

@@ -26,22 +26,22 @@ Venda.init({
             key: 'id',
         }
     },
-    produto_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'produtos', // Nome da tabela associada ao modelo Cliente
-            key: 'id',
-        }
-    },
-    mao_de_obra_id: {
-        type: DataTypes.INTEGER,
-        allowNull: true,
-        references: {
-            model: 'mao_de_obra', // Nome da tabela associada ao modelo Cliente
-            key: 'id',
-        }
-    },
+    // produto_id: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: true,
+    //     references: {
+    //         model: 'produtos', // Nome da tabela associada ao modelo Cliente
+    //         key: 'id',
+    //     }
+    // },
+    // mao_de_obra_id: {
+    //     type: DataTypes.INTEGER,
+    //     allowNull: true,
+    //     references: {
+    //         model: 'mao_de_obra', // Nome da tabela associada ao modelo Cliente
+    //         key: 'id',
+    //     }
+    // },
     imposto: {
         type: DataTypes.FLOAT,
         allowNull: true,

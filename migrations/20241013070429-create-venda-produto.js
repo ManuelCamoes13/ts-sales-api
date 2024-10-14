@@ -1,30 +1,47 @@
+'use strict';
+
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('facturas', {
+    await queryInterface.createTable('venda_produtos', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
-        allowNull: false,
       },
       venda_id: {
         type: Sequelize.INTEGER,
+        allowNull: true,
         references: {
-          model: 'vendas',
+          model: 'vendas', // Nome da tabela de vendas
           key: 'id',
         },
-        allowNull: false,
         onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
+        onDelete: 'CASCADE',
       },
-      data: {
-        type: Sequelize.DATE,
+      produto_id: {
+        type: Sequelize.INTEGER,
+        allowNull: true,
+        references: {
+          model: 'produtos', // Nome da tabela de produtos
+          key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'CASCADE',
+      },
+      nome: {
+        type: Sequelize.STRING(255),
         allowNull: false,
       },
-      estado: {
-        type: Sequelize.STRING(50),
+      quantidade: {
+        type: Sequelize.INTEGER,
         allowNull: false,
       },
+      preco_unitario: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
+
+      
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,
@@ -39,6 +56,6 @@ module.exports = {
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('facturas');
+    await queryInterface.dropTable('venda_produtos');
   }
 };

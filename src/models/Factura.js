@@ -4,7 +4,7 @@ const sequelize = require('../config/db');
 
 // Definição do modelo Factura
 const Factura = sequelize.define('Factura', {
-    vendaId: {
+    venda_id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         references: {
@@ -14,7 +14,7 @@ const Factura = sequelize.define('Factura', {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
     },
-    codigoFactura: {
+    estado:{
         type: DataTypes.STRING,
         allowNull: false,
     },

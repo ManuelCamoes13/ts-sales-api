@@ -21,26 +21,26 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      produto_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'produtos',
-          key: 'id',
-        },
-        allowNull: true,
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      },
-      maoDeObra_id: {
-        type: Sequelize.INTEGER,
-        references: {
-          model: 'mao_de_obra',
-          key: 'id',
-        },
-        allowNull: true,
-        onUpdate: 'CASCADE',
-        onDelete: 'RESTRICT',
-      },
+      // produto_id: {
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'produtos',
+      //     key: 'id',
+      //   },
+      //   allowNull: true,
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'RESTRICT',
+      // },
+      // maoDeObra_id: {
+      //   type: Sequelize.INTEGER,
+      //   references: {
+      //     model: 'mao_de_obra',
+      //     key: 'id',
+      //   },
+      //   allowNull: true,
+      //   onUpdate: 'CASCADE',
+      //   onDelete: 'RESTRICT',
+      // },
       user_id: {
         type: Sequelize.INTEGER,
         references: {
@@ -51,11 +51,7 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      codigoFactura: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true, // Ensure invoice numbers are unique
-      },
+    
    
       imposto: {
         type: Sequelize.DECIMAL(10, 2),
