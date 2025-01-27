@@ -18,6 +18,16 @@ module.exports = {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
+      recibo_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: 'recibos',
+          key: 'id',
+        },
+        allowNull: true,
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+      },
     
       estado: {
         type: Sequelize.STRING(50),
@@ -36,6 +46,7 @@ module.exports = {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
     },
+
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

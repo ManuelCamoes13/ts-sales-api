@@ -8,6 +8,7 @@ const User = require('./User');
 const Cliente = require('./Cliente'); 
 const Produto = require ('./Produto')
 const MaoDeObra = require('./MaoDeObra')
+const Factura = require('./Factura');
 
 Venda.init({
     user_id: {
@@ -50,6 +51,7 @@ Venda.init({
         type: DataTypes.FLOAT,
         allowNull: true,
     },
+    
 }, {
     sequelize,
     modelName: 'Venda', // Nome do modelo
@@ -59,11 +61,10 @@ Venda.init({
 
 // Definir associações
 Venda.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
-Venda.belongsTo(Produto, { foreignKey: 'produto_id', as: 'produto' });
+Venda.hasOne(Factura, { foreignKey: 'venda_id', as: 'factura' });
 Venda.belongsTo(Cliente, { foreignKey: 'cliente_id', as: 'cliente' });
-Venda.belongsTo(MaoDeObra, { foreignKey: 'mao_de_obra_id', as: 'mao_de_obra' });
-
-Venda.belongsToMany(Produto, { through: 'venda_produtos', as: 'produtos', foreignKey: 'venda_id' });
+Venda.belongsToMany(Produto, { through: 'venda_produtos', foreignKey: 'venda_id', otherKey: 'produto_id', as: 'produtos' });
+Venda.belongsToMany(MaoDeObra, { through: 'venda_mao_de_obras', foreignKey: 'venda_id', otherKey: 'mao_de_obra_id', as: 'mao_de_obras' });
 
 
 module.exports = Venda;

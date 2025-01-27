@@ -65,6 +65,10 @@ module.exports = {
         type: DataTypes.BOOLEAN,
         defaultValue: false, // valor padrão como false
       },
+      tipo: {
+        type: DataTypes.ENUM('cotacao', 'factura'),
+        allowNull: false,
+      },
       
       createdAt: {
         type: Sequelize.DATE,

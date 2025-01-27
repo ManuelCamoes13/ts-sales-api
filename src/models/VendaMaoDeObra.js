@@ -21,6 +21,12 @@ VendaMaoDeObra.init({
             key: 'id',
         }
     },
+
+    quantidade: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      
     preco: {
         type: DataTypes.FLOAT,
         allowNull: false,

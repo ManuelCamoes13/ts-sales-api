@@ -1,9 +1,10 @@
 // models/Categoria.js
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/db');
+const Categoria = require('./CategoriaMaoDeObra');
 
 // Definição do modelo Categoria
-const Categoria = sequelize.define('MaoDeObra', {
+const MaoDeObra = sequelize.define('MaoDeObra', {
     nome: {
         type: DataTypes.STRING,
         allowNull: false,
@@ -12,6 +13,15 @@ const Categoria = sequelize.define('MaoDeObra', {
         type: DataTypes.FLOAT,
         allowNull: false,
     },
+    categoria_id: {
+        type: DataTypes.INTEGER,
+        references: {
+            model: Categoria,
+            key: 'id',
+        },
+        allowNull: false,
+    },
+    
     createdAt: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
@@ -25,5 +35,6 @@ const Categoria = sequelize.define('MaoDeObra', {
     tableName: 'mao_de_obra',
     timestamps: true, // Habilita as colunas createdAt e updatedAt
 });
-
-module.exports = Categoria;
+// Definindo a associação
+MaoDeObra.belongsTo(Categoria, { foreignKey: 'categoria_id', as: 'categoria' });
+module.exports = MaoDeObra;

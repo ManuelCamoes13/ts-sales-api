@@ -3,9 +3,9 @@ const maoDeobraService = require('../services/maoDeobraService');
 
 const criarMaoDeObra = async (req, res) => {
     const { nome } = req.body;
-    const { preco } = req.body;
+    const { preco, categoria_id} = req.body;
     try {
-        const maoDeobra = await maoDeobraService.criarMaoDeObra(nome, preco);
+        const maoDeobra = await maoDeobraService.criarMaoDeObra(nome, preco, categoria_id);
         res.status(201).json({ message: 'Mao-de-obra criada com sucesso', maoDeobra });
     } catch (error) {
         res.status(500).json({ message: 'Erro ao criar Mao-de-obra', error: error.message });
@@ -24,10 +24,10 @@ const listarMaoDeobra = async (req, res) => {
 const atualizarMaoDeObra = async (req, res) => {
     const { id } = req.params;
     const { nome } = req.body;
-    const { preco } = req.body;
+    const { preco, categoria_id } = req.body;
 
     try {
-        const maoDeobra = await maoDeobraService.atualizarMaoDeObra(id, nome, preco);
+        const maoDeobra = await maoDeobraService.atualizarMaoDeObra(id, nome, preco, categoria_id);
         res.status(200).json({ message: 'Mao-de-obra atualizada com sucesso', maoDeobra });
     } catch (error) {
         if (error.message === 'Mao de obra não encontrada') {

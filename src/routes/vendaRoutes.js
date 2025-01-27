@@ -5,9 +5,12 @@ const router = express.Router();
 // Realizar uma venda
 router.post('/', vendaController.realizarVenda);
 
-// Outras rotas específicas para vendas podem ser adicionadas aqui no futuro
+// Obter todas as vendas
 router.get('/', vendaController.getAllVendas);
 
+// Obter detalhes de uma venda específica
+router.get('/:id', vendaController.getVendaById);
 
+router.delete('/:vendaId', vendaController.cancelarVenda);
 
 module.exports = router;

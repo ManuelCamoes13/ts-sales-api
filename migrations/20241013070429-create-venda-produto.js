@@ -33,7 +33,7 @@ module.exports = {
         allowNull: false,
       },
       quantidade: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
       preco_unitario: {

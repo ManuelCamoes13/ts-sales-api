@@ -14,7 +14,19 @@ module.exports = {
       estado: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        defaultValue: 'activo', // Define o valor padrão como 'pcs'
+        validate: {
+            isIn: [['activo', 'inactivo']], // Define que só pode ser 'pcs' ou 'cm'
+        }
       },
+      unidade: {
+        type: Sequelize.STRING(50),
+        allowNull: false,
+        defaultValue: 'pcs', // Define o valor padrão como 'pcs'
+        validate: {
+            isIn: [['pcs', 'metros']], // Define que só pode ser 'pcs' ou 'cm'
+        }
+    },
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

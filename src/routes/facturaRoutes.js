@@ -7,6 +7,8 @@ const router = express.Router();
 // Criar uma nova factura
 router.post('/', facturaController.criarFactura);
 
+router.get('/', facturaController.listarFacturas);
+
 // Atualizar uma factura existente
 router.put('/:id', facturaController.atualizarFactura);
 

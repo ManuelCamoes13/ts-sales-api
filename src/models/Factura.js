@@ -14,6 +14,17 @@ const Factura = sequelize.define('Factura', {
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
     },
+
+    recibo_id: {
+        type: DataTypes.INTEGER,
+        allowNull: true,
+        references: {
+            model: 'recibos',
+            key: 'id',
+        },
+        onUpdate: 'CASCADE',
+        onDelete: 'RESTRICT',
+    },
     estado:{
         type: DataTypes.STRING,
         allowNull: false,

@@ -1,5 +1,5 @@
 const Produto = require('../models/Produto'); // Certifique-se de que o caminho está correto
-
+const Categoria = require('../models/Categoria');
 
 // Adicionar produto
 const adicionarProduto = async ({ nome, descricao, quantidade, preco, notas, quantidadeMinima, tipo, unidade, imagem, categoria_id }) => {
@@ -36,9 +36,14 @@ const obterProduto = async (id) => {
     return produto;
 };
 
-// Listar produtos
 const listarProdutos = async () => {
-    return await Produto.findAll();
+    return await Produto.findAll({
+        include: {
+            model: Categoria,
+            as: 'categoria', // Nome do alias definido na associação
+            attributes: ['nome', 'unidade'], // Campos desejados
+        },
+    });
 };
 
 module.exports = { adicionarProduto, atualizarProduto, deletarProduto, obterProduto, listarProdutos };

@@ -1,7 +1,7 @@
 // services/vendaService.js
 const Venda = require('../models/Venda');
 const Produto = require('../models/Produto'); // Certifique-se de ter o modelo Produto configurado
-const VendaProduto = require('../models/VendaPorduto'); // Novo modelo
+const VendaProduto = require('../models/VendaProduto'); // Novo modelo
 const VendaMaoDeObra = require('../models/VendaMaoDeObra'); // Novo modelo
 const MaoDeObra = require('../models/MaoDeObra')
 const Factura = require('../models/Factura');
@@ -12,7 +12,7 @@ const { Op } = require('sequelize');
 // Função para gerar o código da fatura
 const gerarCodigoFactura = async () => {
     const anoAtual = new Date().getFullYear().toString().slice(-2); // Pega os últimos dois dígitos do ano atual (ex: '24')
-    
+
     // Buscar a última fatura gerada
     const ultimaFactura = await Factura.findOne({
         order: [['createdAt', 'DESC']],
@@ -68,10 +68,22 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
                 mao_de_obra_id: maoDeObra.mao_de_obra_id,
                 nome: maoDeObra.nome,
                 preco: maoDeObra.preco,
+                quantidade:maoDeObra.quantidade,
             }, { transaction });
         }
 
         // Gerar o código da fatura
+
+
+
+
+
+
+
+
+
+
+
         const codigoFactura = await gerarCodigoFactura();
 
         // Definir estado e data de pagamento com base no pagamento à vista
@@ -102,6 +114,65 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
     }
 };
 
+const cancelarVenda = async (vendaId) => {
+    const transaction = await Venda.sequelize.transaction();
+
+    try {
+        // Localizar a venda
+        const venda = await Venda.findByPk(vendaId, {
+            include: [
+                {
+                    model: VendaProduto,
+                    as: 'vendaProdutos',
+                },
+                {
+                    model: VendaMaoDeObra,
+                    as: 'vendaMaoDeObras',
+                },
+                {
+                    model: Factura,
+                    as: 'factura',
+                },
+            ],
+            transaction,
+        });
+
+        if (!venda) {
+            throw new Error('Venda não encontrada');
+        }
+
+        // Verificar se a fatura já está cancelada
+        if (venda.factura.estado === 'cancelado') {
+            throw new Error('Venda já está cancelada');
+        }
+
+        // Retornar o estoque dos produtos
+        for (const item of venda.vendaProdutos) {
+            const produto = await Produto.findByPk(item.produto_id, { transaction });
+
+            if (!produto) {
+                throw new Error(`Produto com ID ${item.produto_id} não encontrado`);
+            }
+
+            // Repor a quantidade no estoque
+            produto.quantidade += item.quantidade;
+            await produto.save({ transaction });
+        }
+
+        // Atualizar o estado da fatura para "cancelado"
+        venda.factura.estado = 'cancelado';
+        await venda.factura.save({ transaction });
+
+        // Comitar a transação
+        await transaction.commit();
+        return { message: 'Venda cancelada com sucesso' };
+    } catch (error) {
+        // Reverter a transação em caso de erro
+        await transaction.rollback();
+        throw error;
+    }
+};
+
 
 
 
@@ -112,31 +183,86 @@ const getAllVendasWithDetails = async () => {
             include: [
                 {
                     model: User,
-                    as: 'user', // Certifique-se de definir as associações corretamente
-                    attributes: ['id', 'name'], // Colunas que você quer trazer do User
-                },
-                {
-                    model: MaoDeObra,
-                    as: 'mao_de_obra',
-                    attributes: ['id', 'nome', 'preco'], // Colunas que você quer trazer do Produto
+                    as: 'user',
+                    attributes: ['id', 'name'],
                 },
                 {
                     model: Produto,
-                    as: 'produto',
-                    attributes: ['id', 'nome', 'preco'], // Colunas que você quer trazer do Produto
+                    as: 'produtos',
+                    attributes: ['id', 'nome', 'preco','descricao','unidade'],
+                    through: { attributes: ['quantidade'] },
+                },
+                {
+                    model: MaoDeObra,
+                    as: 'mao_de_obras',
+                    attributes: ['id', 'nome', 'preco',],
+                    through: { attributes: ['preco'] },
                 },
                 {
                     model: Cliente,
                     as: 'cliente',
-                    attributes: ['id', 'nome', 'email'], // Colunas que você quer trazer do Cliente
+                    attributes: ['id', 'nome', 'email', 'nuit', 'contacto','endereco'],
                 },
-            
-            ]
+
+                {
+                    model: Factura,
+                    as: 'factura',
+                    attributes: ['id','codigoFactura', 'estado', 'data', 'dataPagamento'],
+                },
+            ],
         });
         return vendas;
     } catch (error) {
-        console.error('Erro ao buscar as vendas:', error);
+        console.error('Erro ao buscar todas as vendas:', error);
         throw error;
     }
 };
-module.exports = { realizarVenda, getAllVendasWithDetails };
+
+// Função para buscar uma venda específica com detalhes
+const getVendaByIdWithDetails = async (vendaId) => {
+    try {
+        const venda = await Venda.findByPk(vendaId, {
+            include: [
+                {
+                    model: User,
+                    as: 'user',
+                    attributes: ['id', 'name'],
+                },
+                {
+                    model: Produto,
+                    as: 'produtos',
+                    attributes: ['id', 'nome', 'preco','descricao','unidade'],
+                    through: { attributes: ['quantidade'] },
+                },
+                {
+                    model: MaoDeObra,
+                    as: 'mao_de_obras',
+                    attributes: ['id', 'nome', 'preco','categoria_id'],
+                    through: { attributes: ['preco','quantidade'] },
+                },
+                {
+                    model: Cliente,
+                    as: 'cliente',
+                    attributes: ['id', 'nome', 'email', 'nuit', 'contacto','endereco'],
+                },
+                {
+                    model: Factura,
+                    as: 'factura',
+                    attributes: ['id','codigoFactura', 'estado', 'data', 'dataPagamento'],
+                },
+            ],
+        });
+
+        if (!venda) {
+            throw new Error(`Venda com ID ${vendaId} não encontrada`);
+        }
+
+        return venda;
+    } catch (error) {
+        console.error('Erro ao buscar a venda específica:', error);
+        throw error;
+    }
+};
+
+
+module.exports = { realizarVenda, getAllVendasWithDetails, getVendaByIdWithDetails, cancelarVenda };

@@ -9,6 +9,8 @@ router.post('/',  categoriaController.criarCategoria);
 
 router.get('/',  categoriaController.listarCategorias);
 // Atualizar uma categoria existente
+router.get('/:id',  categoriaController.obterCategoria);
+
 router.put('/:id',  categoriaController.atualizarCategoria);
 
 

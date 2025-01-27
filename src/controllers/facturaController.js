@@ -43,4 +43,12 @@ const deletarFactura = async (req, res) => {
     }
 };
 
-module.exports = { criarFactura, atualizarFactura, deletarFactura };
+// Listar produtos
+const listarFacturas = (req, res) => {
+    facturaService.listarFacturas()
+        .then(facturas => res.status(200).json(facturas))
+        .catch(err => res.status(500).send(err.message));
+};
+
+
+module.exports = { criarFactura, atualizarFactura, deletarFactura, listarFacturas };

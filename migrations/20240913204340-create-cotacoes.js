@@ -28,7 +28,7 @@ module.exports = {
         onDelete: 'RESTRICT',
       },
       quantidade: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
       preco: {
@@ -42,6 +42,10 @@ module.exports = {
       estado: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        defaultValue: 'activo', // Define o valor padrão como 'pcs'
+        validate: {
+            isIn: [['activo', 'inactivo']], // Define que só pode ser 'pcs' ou 'cm'
+        }
       },
       createdAt: {
         type: Sequelize.DATE,

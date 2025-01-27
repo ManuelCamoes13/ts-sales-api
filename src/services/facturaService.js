@@ -1,5 +1,7 @@
 // services/facturaService.js
 const Factura = require('../models/Factura');
+const Venda = require('../models/Venda');
+const Cliente = require('../models/Cliente');
 
 const criarFactura = async (vendaId, data) => {
     return await Factura.create({ vendaId, data });
@@ -19,4 +21,22 @@ const deletarFactura = async (id) => {
     await factura.destroy();
 };
 
-module.exports = { criarFactura, atualizarFactura, deletarFactura };
+const listarFacturas = async () => {
+    return await Factura.findAll({
+      // include: [
+      //   {
+      //     model: Venda,
+      //     as: 'venda',
+      //     include: [
+      //       {
+      //         model: Cliente,
+      //         as: 'cliente',
+      //       },
+      //     ],
+      //   },
+      // ],
+    });
+  };
+  
+
+module.exports = { criarFactura, atualizarFactura, deletarFactura, listarFacturas };

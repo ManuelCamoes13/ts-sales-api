@@ -30,17 +30,10 @@ module.exports = {
         allowNull: false,
       },
       quantidade: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.DECIMAL(10, 2),
         allowNull: false,
       },
-      unidade: {
-        type: Sequelize.STRING(50),
-        allowNull: false,
-        defaultValue: 'peca', // Define o valor padrão como 'pcs'
-        validate: {
-            isIn: [['peca', 'tubo']], // Define que só pode ser 'pcs' ou 'cm'
-        }
-    },
+      
       quantidadeMinima: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -65,6 +58,10 @@ module.exports = {
       estado: {
         type: Sequelize.STRING(50),
         allowNull: false,
+        defaultValue: 'activo', // Define o valor padrão como 'pcs'
+        validate: {
+            isIn: [['activo', 'inactivo']], // Define que só pode ser 'pcs' ou 'cm'
+        }
       },
       createdAt: {
         type: Sequelize.DATE,

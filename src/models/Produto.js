@@ -9,7 +9,7 @@ const Produto = sequelize.define('Produto', {
         allowNull: false,
     },
     quantidade: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
     },
     preco: {
@@ -25,7 +25,7 @@ const Produto = sequelize.define('Produto', {
         allowNull: true, // descricao pode ser opcional
     },
     quantidadeMinima: {
-        type: DataTypes.INTEGER,
+        type: DataTypes.FLOAT,
         allowNull: false,
         defaultValue: 5, // Valor padrão para quando a quantidade de estoque está baixa
     },
@@ -33,14 +33,7 @@ const Produto = sequelize.define('Produto', {
         type: DataTypes.STRING, // Pode armazenar o caminho ou URL da imagem
         allowNull: true,
     },
-    unidade: {
-        type: DataTypes.STRING(50),
-        allowNull: false,
-        defaultValue: 'pcs', // Valor padrão
-        validate: {
-          isIn: [['pcs', 'cm']], // Só permite 'pcs' ou 'cm'
-        },
-      },
+   
     categoria_id: {
         type: DataTypes.INTEGER,
         references: {
@@ -53,5 +46,10 @@ const Produto = sequelize.define('Produto', {
     tableName: 'produtos',
     timestamps: false,
 });
+
+// Definir associações
+Produto.belongsTo(Categoria, { foreignKey: 'categoria_id', as: 'categoria' });
+Categoria.hasMany(Produto, { foreignKey: 'categoria_id' });
+
 
 module.exports = Produto;

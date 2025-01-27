@@ -32,10 +32,16 @@ module.exports = {
         type: Sequelize.STRING(255),
         allowNull: false,
       },
+      quantidade: {
+        type: Sequelize.INTEGER,
+        allowNull: false,
+      },
       preco: {
         type: Sequelize.FLOAT,
         allowNull: false,
       },
+
+      
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

@@ -6,6 +6,8 @@ const categoriaRoutes = require ('./categoriaRoutes');
 const clienteRoutes = require ('./clienteRoutes');
 const facturaRoutes = require ('./facturaRoutes');
 const maoDeObraRoutes = require ('./maoDeObraRoutes');
+const categoriaMaoDeObraRoutes = require ('./categoriaMaoDeObraRoutes');
+const reciboRoutes = require ('./reciboRoutes')
 const {verificarToken}  = require('../middlewares/auth'); // Importe o middleware de autenticação
 
 const router = express.Router();
@@ -21,9 +23,11 @@ router.use('/users', userRoutes);
 router.use('/produtos', produtoRoutes); // Protege todas as rotas de produtos
 router.use('/venda', vendaRoutes); 
 router.use('/categorias', categoriaRoutes);
+router.use('/categorias_mao_de_obra', categoriaMaoDeObraRoutes);
 router.use('/clientes', clienteRoutes);
 router.use('/facturas', facturaRoutes);
 router.use('/mao_de_obra', maoDeObraRoutes);
+router.use('/recibos', reciboRoutes);
 // Caso queira proteger rotas específicas dentro de um grupo de rotas, faça assim:
 
 module.exports = router;
