@@ -19,9 +19,9 @@ const sequelize = new Sequelize('carecatubos', 'root', 'Admin1234', {
 (async () => {
     try {
         await sequelize.authenticate();
-        console.log('✅ Conexão com o banco de dados estabelecida com sucesso.');
+        console.log('? Conexão com o banco de dados estabelecida com sucesso.');
     } catch (err) {
-        console.error('❌ Erro ao conectar ao banco de dados:', err.message);
+        console.error('? Erro ao conectar ao banco de dados:', err.message);
         process.exit(1); // Encerra a aplicação em caso de falha na conexão
     }
 })();
