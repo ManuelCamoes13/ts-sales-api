@@ -40,7 +40,7 @@ module.exports = {
       },
       imagem: {
         type: Sequelize.STRING(255),
-        allowNull: false,
+        allowNull: true,
       },
       preco: {
         type: Sequelize.DECIMAL(10, 2),
