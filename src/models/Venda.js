@@ -60,6 +60,7 @@ Venda.init({
 });
 
 // Definir associações
+
 Venda.belongsTo(User, { foreignKey: 'user_id', as: 'user' });
 Venda.hasOne(Factura, { foreignKey: 'venda_id', as: 'factura' });
 Venda.belongsTo(Cliente, { foreignKey: 'cliente_id', as: 'cliente' });

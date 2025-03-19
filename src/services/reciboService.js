@@ -89,10 +89,10 @@ const listRecibos = async () => {
 
 const getRecibo = async (id) => {
   return await Recibo.findByPk(id, {
-    attributes: ['id', 'codigo', 'formaPagamento', 'numeroCheque', 'estado', 'createdAt'], // Adicione o createdAt explicitamente
+    attributes: ['id', 'codigo', 'formaPagamento', 'numeroCheque', 'estado', 'createdAt','updatedAt'], // Adicione o createdAt explicitamente
     include: {
       model: Factura,
-      attributes: ['id', 'codigoFactura', 'estado', 'createdAt'], // Adicione o createdAt do modelo Factura
+      attributes: ['id', 'codigoFactura', 'estado', 'createdAt','updatedAt'], // Adicione o createdAt do modelo Factura
     },
   });
 };
