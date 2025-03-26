@@ -21,7 +21,7 @@ const Categoria = sequelize.define('Categoria', {
         allowNull: false,
         defaultValue: 'pcs', // Valor padrão
         validate: {
-          isIn: [['pcs', 'metros']], // Só permite 'pcs' ou 'cm'
+          isIn: [['pcs', 'm']], // Só permite 'pcs' ou 'cm'
         },
       },
     

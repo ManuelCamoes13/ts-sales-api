@@ -33,6 +33,10 @@ const Produto = sequelize.define('Produto', {
         type: DataTypes.STRING, // Pode armazenar o caminho ou URL da imagem
         allowNull: true,
     },
+    unidade: {
+        type: DataTypes.STRING, 
+        allowNull: true,
+    },
    
     categoria_id: {
         type: DataTypes.INTEGER,

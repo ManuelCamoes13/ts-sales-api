@@ -22,10 +22,7 @@ module.exports = {
       unidade: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        defaultValue: 'pcs', // Define o valor padrão como 'pcs'
-        validate: {
-            isIn: [['pcs', 'metros']], // Define que só pode ser 'pcs' ou 'cm'
-        }
+       
     },
       createdAt: {
         type: Sequelize.DATE,
