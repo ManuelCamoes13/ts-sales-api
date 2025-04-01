@@ -6,8 +6,16 @@ const adicionarProduto = async ({ nome, descricao, quantidade, preco, notas, qua
     if (!nome || quantidade === undefined || preco === undefined || !categoria_id) {
         throw new Error('Nome, quantidade, preço e categoria são necessários');
     }
+
+    // Verifica se já existe um produto com o mesmo nome
+    const produtoExistente = await Produto.findOne({ where: { nome } });
+    if (produtoExistente) {
+        throw new Error('Já existe um produto com este nome');
+    }
+
     return await Produto.create({ nome, descricao, quantidade, preco, notas, quantidadeMinima, tipo, unidade, imagem, categoria_id });
 };
+
 
 // Atualizar produto
 const atualizarProduto = async (id, { nome, descricao, quantidade, preco, notas, quantidadeMinima, tipo, unidade, imagem, categoria_id }) => {

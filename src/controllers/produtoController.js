@@ -3,7 +3,7 @@ const produtoService = require('../services/produtoService');
 // Adicionar produto
 const adicionarProduto = (req, res) => {
     console.log(req.body)
-    const { nome, descricao, quantidade, preco, notas, quantidadeMinima,tipo, unidade, imagem, categoria_id } = req.body;
+    const { nome, descricao, quantidade, preco, notas, quantidadeMinima, tipo, unidade, imagem, categoria_id } = req.body;
     if (!nome || quantidade === undefined || preco === undefined || !categoria_id) {
         return res.status(400).send('Nome, quantidade, preço e categoria são necessários');
     }
