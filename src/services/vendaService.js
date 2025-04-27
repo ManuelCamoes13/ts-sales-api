@@ -100,7 +100,7 @@ const realizarVenda = async (
                 quantidade: item.quantidade,
                 preco_unitario: item.preco,
             }, { transaction });
-
+console.log(isFactura)
             // Reduzir stock apenas se for fatura
             if (isFactura == true) {
                 produto.quantidade -= item.quantidade;
