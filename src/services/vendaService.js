@@ -101,7 +101,7 @@ const realizarVenda = async (
                 preco_unitario: item.preco,
             }, { transaction });
             // Reduzir stock apenas se for fatura
-            if (isFactura === "1") {
+            if (isFactura == 1) {
                 produto.quantidade -= item.quantidade;
                 await produto.save({ transaction });
             }
@@ -119,7 +119,7 @@ const realizarVenda = async (
         }
 
         // Gerar código e criar fatura ou cotação
-        if (isFactura === "1") {
+        if (isFactura == 1) {
             const codigoFactura = await gerarCodigoFactura();
 
             let estado = 'pendente';
