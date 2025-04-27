@@ -120,7 +120,7 @@ const realizarVenda = async (
         }
 
         // Gerar código e criar fatura ou cotação
-        if (isFactura == "1") {
+        if (isFactura === "1") {
             const codigoFactura = await gerarCodigoFactura();
 
             let estado = 'pendente';
