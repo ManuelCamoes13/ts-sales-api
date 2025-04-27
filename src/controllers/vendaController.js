@@ -2,11 +2,11 @@ const vendaService = require('../services/vendaService');
 
 const realizarVenda = async (req, res) => {
     try {
-        const { user_id, cliente_id, produtos, mao_de_obras, imposto, desconto, pagamentoAVista } = req.body;
+        const { user_id, cliente_id, produtos, mao_de_obras, imposto, desconto, isFactura, pagamentoAVista } = req.body;
 
         // Chama o serviço para realizar a venda
-        const venda = await vendaService.realizarVenda(user_id, cliente_id, produtos, mao_de_obras, imposto, desconto, pagamentoAVista);
-
+        const venda = await vendaService.realizarVenda(user_id, cliente_id, produtos, mao_de_obras, imposto, desconto, isFactura, pagamentoAVista);
+console.log(venda)
         res.status(201).json({ success: true, venda });
     } catch (error) {
         console.error('Erro ao realizar venda:', error);

@@ -1,52 +1,52 @@
+const { DataTypes } = require('sequelize');
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('cotacoes', {
+    await queryInterface.createTable('Cotacoes', {
       id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
         primaryKey: true,
         allowNull: false,
       },
-      cliente_id: {
+      venda_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'clientes',
+          model: 'vendas',
           key: 'id',
         },
         allowNull: false,
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      produto_id: {
+      recibo_id: {
         type: Sequelize.INTEGER,
         references: {
-          model: 'produtos',
+          model: 'recibos',
           key: 'id',
         },
-        allowNull: false,
+        allowNull: true,
         onUpdate: 'CASCADE',
         onDelete: 'RESTRICT',
       },
-      quantidade: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      preco: {
-        type: Sequelize.DECIMAL(10, 2),
-        allowNull: false,
-      },
-      validade: {
-        type: Sequelize.DATE,
-        allowNull: false,
-      },
+    
       estado: {
         type: Sequelize.STRING(50),
         allowNull: false,
-        defaultValue: 'activo', // Define o valor padrão como 'pcs'
-        validate: {
-            isIn: [['activo', 'inactivo']], // Define que só pode ser 'pcs' ou 'cm'
-        }
       },
+      codigoCotacao: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true, // Ensure invoice numbers are unique
+      },
+    data: {
+        type: DataTypes.DATE,
+        allowNull: false,
+    },
+    dataPagamento: {
+        type: DataTypes.DATE,
+        defaultValue: DataTypes.NOW,
+    },
+
       createdAt: {
         type: Sequelize.DATE,
         allowNull: false,

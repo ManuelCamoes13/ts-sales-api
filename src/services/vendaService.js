@@ -8,41 +8,85 @@ const Factura = require('../models/Factura');
 const User = require('../models/User');
 const Cliente = require('../models/Cliente');
 const { Op } = require('sequelize');
+const sequelize = require('../config/db');
+const Cotacao = require('../models/Cotacao')
 
 // Função para gerar o código da fatura
 const gerarCodigoFactura = async () => {
-    const anoAtual = new Date().getFullYear().toString().slice(-2); // Pega os últimos dois dígitos do ano atual (ex: '24')
+    const anoAtual = new Date().getFullYear().toString().slice(-2); // Ex: '24'
 
-    // Buscar a última fatura gerada
+    // Buscar a fatura com o maior número sequencial no código
     const ultimaFactura = await Factura.findOne({
-        order: [['createdAt', 'DESC']],
+        where: {
+            codigoFactura: {
+                [Op.like]: `FACT-%/${anoAtual}` // Apenas do ano atual
+            }
+        },
+        order: [
+            [sequelize.literal(`CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(codigoFactura, '-', -1), '/', 1) AS UNSIGNED)`), 'DESC']
+        ],
     });
 
-    let numeroSequencial = '0001'; // Caso não haja nenhuma fatura no sistema
+    let numeroSequencial = '0001'; // Valor inicial padrão
     if (ultimaFactura) {
-        // Extrair o número sequencial e incrementar
         const ultimoCodigo = ultimaFactura.codigoFactura;
         const ultimoNumero = parseInt(ultimoCodigo.split('-')[1].split('/')[0], 10);
-        numeroSequencial = String(ultimoNumero + 1).padStart(4, '0'); // Incrementa e preenche com zeros à esquerda
+        numeroSequencial = String(ultimoNumero + 1).padStart(4, '0');
     }
 
-    // Retorna o código da fatura no formato FACT-0001/24
     return `FACT-${numeroSequencial}/${anoAtual}`;
 };
 
+const gerarCodigoCotacao = async () => {
+    const anoAtual = new Date().getFullYear().toString().slice(-2); // Ex: '24'
 
-const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, imposto, desconto, pagamentoAVista = false) => {
+    // Buscar a fatura com o maior número sequencial no código
+    const ultimaFactura = await Cotacao.findOne({
+        where: {
+            codigoCotacao: {
+                [Op.like]: `COT-%/${anoAtual}` // Apenas do ano atual
+            }
+        },
+        order: [
+            [sequelize.literal(`CAST(SUBSTRING_INDEX(SUBSTRING_INDEX(codigoCotacao, '-', -1), '/', 1) AS UNSIGNED)`), 'DESC']
+        ],
+    });
+
+    let numeroSequencial = '0001'; // Valor inicial padrão
+    if (ultimaFactura) {
+        const ultimoCodigo = ultimaFactura.codigoCotacao;
+        const ultimoNumero = parseInt(ultimoCodigo.split('-')[1].split('/')[0], 10);
+        numeroSequencial = String(ultimoNumero + 1).padStart(4, '0');
+    }
+
+    return `COT-${numeroSequencial}/${anoAtual}`;
+};
+
+
+
+const realizarVenda = async (
+    user_id,
+    cliente_id,
+    produtos,
+    mao_de_obras,
+    imposto,
+    desconto,
+    isFactura,
+    pagamentoAVista = false,
+   
+) => {
     const transaction = await Venda.sequelize.transaction();
-
     try {
         // Criar a venda
+        
         const novaVenda = await Venda.create({
             user_id,
             cliente_id,
             imposto,
             desconto,
+            isFactura,
+           
         }, { transaction });
-
         // Registrar os produtos vendidos
         for (const item of produtos) {
             const produto = await Produto.findByPk(item.produto_id, { transaction });
@@ -57,8 +101,11 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
                 preco_unitario: item.preco,
             }, { transaction });
 
-            produto.quantidade -= item.quantidade;
-            await produto.save({ transaction });
+            // Reduzir stock apenas se for fatura
+            if (isFactura == true) {
+                produto.quantidade -= item.quantidade;
+                await produto.save({ transaction });
+            }
         }
 
         // Registrar as mãos-de-obra
@@ -68,51 +115,52 @@ const realizarVenda = async (user_id, cliente_id, produtos, mao_de_obras, impost
                 mao_de_obra_id: maoDeObra.mao_de_obra_id,
                 nome: maoDeObra.nome,
                 preco: maoDeObra.preco,
-                quantidade:maoDeObra.quantidade,
+                quantidade: maoDeObra.quantidade,
             }, { transaction });
         }
 
-        // Gerar o código da fatura
+        // Gerar código e criar fatura ou cotação
+        if (isFactura == "1") {
+            const codigoFactura = await gerarCodigoFactura();
 
+            let estado = 'pendente';
+            let dataPagamento = null;
 
+            if (pagamentoAVista) {
+                estado = 'pago';
+                dataPagamento = new Date();
+            }
 
+            await Factura.create({
+                venda_id: novaVenda.id,
+                codigoFactura,
+                data: new Date(),
+                estado,
+                dataPagamento,
+            }, { transaction });
+        } else {
+            const codigoCotacao = await gerarCodigoCotacao();
+            let estado = 'pendente';
+            let dataPagamento = null;
 
-
-
-
-
-
-
-
-        const codigoFactura = await gerarCodigoFactura();
-
-        // Definir estado e data de pagamento com base no pagamento à vista
-        let estado = 'pendente';
-        let dataPagamento = null;
-
-        if (pagamentoAVista) {
-            estado = 'pago';
-            dataPagamento = new Date();
+            await Cotacao.create({
+                venda_id: novaVenda.id,
+                codigoCotacao,
+                data: new Date(),
+                estado,
+                dataPagamento,
+                
+            }, { transaction });
         }
 
-        // Criar a fatura vinculada à venda
-        await Factura.create({
-            venda_id: novaVenda.id,
-            codigoFactura,
-            data: new Date(),
-            estado,
-            dataPagamento,
-        }, { transaction });
-
-        // Comitar a transação
         await transaction.commit();
         return novaVenda;
     } catch (error) {
-        // Reverter a transação em caso de erro
         await transaction.rollback();
         throw error;
     }
 };
+
 
 const cancelarVenda = async (vendaId) => {
     const transaction = await Venda.sequelize.transaction();
@@ -209,6 +257,11 @@ const getAllVendasWithDetails = async () => {
                     as: 'factura',
                     attributes: ['id','codigoFactura', 'estado', 'data', 'dataPagamento'],
                 },
+                {
+                    model: Cotacao,
+                    as: 'cotacao',
+                    attributes: ['id','codigoCotacao', 'estado', 'data', 'dataPagamento'],
+                },
             ],
         });
         return vendas;
@@ -249,6 +302,11 @@ const getVendaByIdWithDetails = async (vendaId) => {
                     model: Factura,
                     as: 'factura',
                     attributes: ['id','codigoFactura', 'estado', 'data', 'dataPagamento'],
+                },
+                {
+                    model: Cotacao,
+                    as: 'cotacao',
+                    attributes: ['id','codigoCotacao', 'estado', 'data', 'dataPagamento'],
                 },
             ],
         });
