@@ -6,5 +6,6 @@ Migrar tabelas
 npx sequelize-cli db:migrate
 
 
-STRICT_TRANS_TABLES,NO_ENGINE_SUBSTITUTION
+SET GLOBAL sql_mode = 'NO_ENGINE_SUBSTITUTION';
+
 
